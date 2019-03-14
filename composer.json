@@ -1,0 +1,40 @@
+{
+  "name": "jeff-99/ze-phpspec",
+  "description": "PHPSpec matchers for Zend Expressive",
+  "version": "0.0.0",
+  "type": "library",
+  "keywords": [
+    "Zend Expressive",
+    "phpspec",
+    "matchers",
+    "testing",
+    "test",
+    "BDD"
+  ],
+  "authors": [
+    {
+      "name": "Jeffrey Slort",
+      "email": "j_slort@hotmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.1",
+    "phpspec/phpspec": "^3.2 || ^4.0",
+    "psr/http-message": "^1.0"
+  },
+  "require-dev": {
+    "phing/phing": "^2.14",
+    "leanphp/phpspec-code-coverage" : "^3.1",
+    "sebastian/phpcpd": "^2.0",
+    "phpmd/phpmd": "^2.4",
+    "pdepend/pdepend": "^2.2",
+    "phploc/phploc": "^3.0",
+    "squizlabs/php_codesniffer": "^2.6"
+  },
+  "autoload": {
+    "psr-4": {
+      "ZEPHPSpec\\": "./src"
+    }
+  },
+  "minimum-stability": "stable"
+}
