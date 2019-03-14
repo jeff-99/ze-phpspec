@@ -3,6 +3,7 @@
 
 namespace ZEPHPSpec\Matcher;
 
+use function array_diff;
 use function class_exists;
 use function get_class;
 use function is_string;
@@ -26,25 +27,21 @@ class ResponseMatcher extends BasicMatcher
     }
 
 
-    public function supports($name, $subject, array $arguments)
+    public function supports($name, $subject, array $arguments): bool
     {
         return $name === 'returnResponse'
             && count($arguments) === 3
-            && class_exists($arguments[0]
-            && is_int($arguments[1])
-        );
+            && is_int($arguments[0])
+            && $arguments[1]
+        ;
     }
 
 
-    protected function matches($subject, array $arguments)
+    protected function matches($subject, array $arguments): bool
     {
-        list($expectedType, $expectedStatusCode, $expectedBody) = $arguments;
+        list($expectedStatusCode, $expectedBody, $expectedHeaders) = $arguments;
 
         if(!$subject instanceof ResponseInterface){
-            return false;
-        }
-
-        if(!$subject instanceof $expectedType){
             return false;
         }
 
@@ -52,15 +49,22 @@ class ResponseMatcher extends BasicMatcher
             return false;
         }
 
-        if($subject->getBody() !== $expectedBody){
+        if((string) $subject->getBody() !== $expectedBody){
             return false;
+        }
+        
+        foreach ($expectedHeaders as $headerKey => $headerValues){
+            $subjectHeaderValues = $subject->getHeader($headerKey);
+            if(count(array_diff($headerValues, $subjectHeaderValues)) > 0){
+                return false;
+            }
         }
 
         return true;
     }
 
 
-    protected function getFailureException($name, $subject, array $arguments)
+    protected function getFailureException($name, $subject, array $arguments): FailureException
     {
         return new FailureException(sprintf(
             'Expected %s to contain the following parameters %s, but it does not.',
@@ -69,7 +73,7 @@ class ResponseMatcher extends BasicMatcher
         ));
     }
 
-    protected function getNegativeFailureException($name, $subject, array $arguments)
+    protected function getNegativeFailureException($name, $subject, array $arguments): FailureException
     {
         return new FailureException(sprintf(
             'Expected %s to NOT the following parameters %s, but it does.',
