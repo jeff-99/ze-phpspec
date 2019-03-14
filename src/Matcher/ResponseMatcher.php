@@ -4,13 +4,9 @@
 namespace ZEPHPSpec\Matcher;
 
 use function array_diff;
-use function class_exists;
-use function get_class;
-use function is_string;
 use PhpSpec\Exception\Example\FailureException;
 use PhpSpec\Formatter\Presenter\Presenter;
 use PhpSpec\Matcher\BasicMatcher;
-use PhpSpec\Matcher\Matcher;
 use Psr\Http\Message\ResponseInterface;
 
 class ResponseMatcher extends BasicMatcher
@@ -52,7 +48,7 @@ class ResponseMatcher extends BasicMatcher
         if((string) $subject->getBody() !== $expectedBody){
             return false;
         }
-        
+
         foreach ($expectedHeaders as $headerKey => $headerValues){
             $subjectHeaderValues = $subject->getHeader($headerKey);
             if(count(array_diff($headerValues, $subjectHeaderValues)) > 0){
